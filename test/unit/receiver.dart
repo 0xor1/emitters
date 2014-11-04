@@ -51,6 +51,21 @@ void runReceiverTests(){
       expect(() => receiver.listen(emitter1, TypeA, (emission){}), throwsA(new isInstanceOf<DuplicateReceiverSettingError>()));
     });
 
+    test('.listenOnce only gets one emission.', (){
+      var count = 0;
+      receiver.ignoreAll();
+      receiver.listenOnce(emitter1, TypeA, (_){count++;});
+      emitter1.emit(new TypeA());
+      emitter1.emit(new TypeA());
+      emitter1.emit(new TypeA());
+      Timer.run(expectAsync((){
+        expect(count, equals(1));
+      }));
+    });
+
+    test('throws a DuplicateReceiverSettingError if it attempts to listenOnce to the same emitter/type combination more than once.', (){
+      expect(() => receiver.listenOnce(emitter1, TypeA, (emission){}), throwsA(new isInstanceOf<DuplicateReceiverSettingError>()));
+    });
   });
 
 }

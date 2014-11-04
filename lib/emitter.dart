@@ -7,7 +7,8 @@ part of emitters;
 /// A mixin class to enable any object to emit arbitrary objects.
 class Emitter{
 
-  Map<Type, List<Handler>> _handlerQueues;
+  Map<Type, Set<Handler>> _handlerQueues;
+  Map<Handler, Handler> _onceWrapperHandlerMap;
   /// Describes whether the object is currently emitting.
   bool get isEmitting => _emittingType != null;
   Type _emittingType;
@@ -21,12 +22,34 @@ class Emitter{
       throw new EmitTimeQueueChangeError._internal(this, type, handler);
     }
     if(_handlerQueues == null){
-      _handlerQueues = new Map<Type, List<Handler>>();
+      _handlerQueues = new Map<Type, Set<Handler>>();
     }
     if(_handlerQueues[type] == null){
-      _handlerQueues[type] = new List<Handler>();
+      _handlerQueues[type] = new Set<Handler>();
     }
     _handlerQueues[type].add(handler);
+  }
+
+  /// Adds [handler] to the handler queue of [type] and removes it after one emission.
+  void once(Type type, Handler handler){
+    var onceWrapperHandler;
+    onceWrapperHandler = (Emission emission){
+      handler(emission);
+      emission.finished.then((_){
+        off(type, onceWrapperHandler);
+        _onceWrapperHandlerMap.remove(handler);
+        if(_onceWrapperHandlerMap.isEmpty){
+          _onceWrapperHandlerMap = null;
+        }
+      });
+    };
+    if(_onceWrapperHandlerMap == null){
+      _onceWrapperHandlerMap = new Map<Handler, Handler>();
+    }
+    if(_onceWrapperHandlerMap[handler] == null){
+      _onceWrapperHandlerMap[handler] = onceWrapperHandler;
+      on(type, onceWrapperHandler);
+    }
   }
 
   /// Removes the [handler] from the handler queue of [type].
@@ -42,6 +65,14 @@ class Emitter{
         if(_handlerQueues.isEmpty){
           _handlerQueues = null;
         }
+      }
+    }
+    if(_onceWrapperHandlerMap != null && _onceWrapperHandlerMap[handler] != null){
+      var onceWrapperHandler = _onceWrapperHandlerMap[handler];
+      off(type, onceWrapperHandler);
+      _onceWrapperHandlerMap.remove(handler);
+      if(_onceWrapperHandlerMap.isEmpty){
+        _onceWrapperHandlerMap = null;
       }
     }
   }
@@ -71,5 +102,4 @@ class Emitter{
 
     return finished;
   }
-
 }
