@@ -10,14 +10,19 @@ class Receiver{
   Map<Emitter, Map<Type, Handler>> _typeIndexes;
   Map<Type, Map<Emitter, Handler>> _emitterIndexes;
 
-  /// Adds an [handler] to the [emitter]s handler queue of [type].
-  void listen(Emitter emitter, Type type, Handler handler){
+  /// Adds the [handler] to the [emitter]s handler queue of [type].
+  void listen(Emitter emitter, Type type, Handler handler) => _listen(emitter, type, handler, (e, t, h) => e.on(t, h));
+
+  /// Adds the [handler] to the [emitter]s handler queue of [type] for one emission only.
+  void listenOnce(Emitter emitter, Type type, Handler handler) => _listen(emitter, type, handler, (e, t, h) => e.once(t, h));
+
+  void _listen(Emitter emitter, Type type, Handler handler, void on(Emitter emitter, Type type, Handler handler)){
     _initialiseIndexes(emitter, type);
     if(_typeIndexes[emitter][type] != null){
       throw new DuplicateReceiverSettingError._internal(this, emitter, type, _typeIndexes[emitter][type], handler);
     }else{
       _typeIndexes[emitter][type] = _emitterIndexes[type][emitter] = handler;
-      emitter.on(type, handler);
+      on(emitter, type, handler);
     }
   }
 
@@ -78,5 +83,4 @@ class Receiver{
       ignoreFrom(_typeIndexes.keys.first);
     }
   }
-
 }

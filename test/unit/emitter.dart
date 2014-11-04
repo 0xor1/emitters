@@ -48,6 +48,30 @@ void runEmitterTests(){
       }));
     });
 
+    test('once only gets one emission', (){
+      var count = 0;
+      emitter1.once(TypeA, (_){count++;});
+      emitter1.emit(new TypeA());
+      emitter1.emit(new TypeA());
+      emitter1.emit(new TypeA());
+      Timer.run(expectAsync((){
+        expect(count, equals(1));
+      }));
+    });
+
+    test('once doesn\'t allow a handler to be duplicated', (){
+      var count = 0;
+      var handler = (_){count++;};
+      emitter1.once(TypeA, handler);
+      emitter1.once(TypeA, handler);
+      emitter1.emit(new TypeA());
+      emitter1.emit(new TypeA());
+      emitter1.emit(new TypeA());
+      Timer.run(expectAsync((){
+        expect(count, equals(1));
+      }));
+    });
+
   });
 
 }
