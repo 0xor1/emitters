@@ -1,4 +1,4 @@
-#Emitters
+#Emitters [![Build Status](https://drone.io/github.com/0xor1/emitters/status.png)](https://drone.io/github.com/0xor1/emitters/latest)
 
 Emitters provides a simple mixin class, Emitter, to enable any object to emit arbitrary
 objects. It also provides a convenience mixin class, Receiver, to assist
