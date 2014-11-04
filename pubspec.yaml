@@ -1,0 +1,7 @@
+name: emitters
+version: 0.0.0
+author: Daniel Robinson <daniel.robinson.dart@gmail.com>
+description: simple mixins to allow any object to emit and receive arbitrary objects.
+homepage: https://github.com/0xor1/emitters
+dev_dependencies:
+  unittest: any
