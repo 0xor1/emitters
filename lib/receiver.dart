@@ -67,7 +67,7 @@ class Receiver{
   }
 
   /// Removes all [Handler]s attached to [emitter].
-  void ignoreFrom(Emitter emitter){
+  void ignoreEmitter(Emitter emitter){
     if(_typeIndexes != null && _typeIndexes[emitter] != null){
       var typeIndex = _typeIndexes[emitter];
       while(typeIndex.isNotEmpty){
@@ -80,7 +80,7 @@ class Receiver{
   void ignoreAll(){
     if(_typeIndexes != null)
     while(_typeIndexes.isNotEmpty){
-      ignoreFrom(_typeIndexes.keys.first);
+      ignoreEmitter(_typeIndexes.keys.first);
     }
   }
 }
