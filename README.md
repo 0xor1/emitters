@@ -14,8 +14,8 @@ class Bar{}
 
 void main(){
   var emitter = new Emitter();
-  var fooSub = emitter.on(Foo, (_) => print('Foo'));
-  var barSub = emitter.on(Bar, (_) => print('Bar'));
+  emitter.on(Foo, (_) => print('Foo'));
+  emitter.on(Bar, (_) => print('Bar'));
   emitter.emit(new Foo());
   emitter.emit(new Bar());
 }
@@ -54,6 +54,8 @@ void main(){
   cat.listen(dog, Bark, cat.dogBarkHandler);
   dog.bark(9);  // cat not disturbed
   dog.bark(11); // cat running away
+  cat.ignoreAll();
+  dog.bark(11); // cat isn't listening to anything anymore
 }
 ```
 
