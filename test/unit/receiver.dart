@@ -22,7 +22,7 @@ void runReceiverTests(){
       var receiver = new Receiver();
       var emitter = new Emitter();
       receiver.ignoreAll();
-      receiver.ignoreFrom(emitter);
+      receiver.ignoreEmitter(emitter);
       receiver.ignoreType(Object);
       expect(true, equals(true));
     });
@@ -37,8 +37,8 @@ void runReceiverTests(){
       }));
     });
 
-    test('.ignoreFrom(emitter) unhooks all Handlers from the specified emitter.', (){
-      receiver.ignoreFrom(emitter1);
+    test('.ignoreEmitter(emitter) unhooks all Handlers from the specified emitter.', (){
+      receiver.ignoreEmitter(emitter1);
       emitter1.emit(new TypeA());
       emitter2.emit(new TypeB());
       Timer.run(expectAsync((){
