@@ -34,28 +34,6 @@ void runEventTests(){
         }));
       }));
     });
-
-    test('event.data is readonly.', (){
-      emitter1.emit(new TypeA());
-      Timer.run(expectAsync((){
-        expect(() => lastReceivedEvent.data = null, throwsA(new isInstanceOf<NoSuchMethodError>()));
-      }));
-    });
-
-    test('event.emitter is readonly.', (){
-      emitter1.emit(new TypeA());
-      Timer.run(expectAsync((){
-        expect(() => lastReceivedEvent.emitter = null, throwsA(new isInstanceOf<NoSuchMethodError>()));
-      }));
-    });
-
-    test('event.finished is getter only.', (){
-      emitter1.emit(new TypeA());
-      Timer.run(expectAsync((){
-        expect(() => lastReceivedEvent.finished = null, throwsA(new isInstanceOf<NoSuchMethodError>()));
-      }));
-    });
-
   });
 
 }
