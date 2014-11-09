@@ -4,7 +4,7 @@
 
 part of emitters;
 
-/// A mixin class to enable any object to emit arbitrary objects.
+/// A mixin class to enable any object to emit events with arbitrary data types.
 class Emitter{
 
   Map<Type, Set<Handler>> _handlerQueues;
@@ -30,10 +30,10 @@ class Emitter{
     _handlerQueues[type].add(handler);
   }
 
-  /// Adds [handler] to the handler queue of [type] and removes it after one emission.
+  /// Adds [handler] to the handler queue of [type] and removes it after one event.
   void once(Type type, Handler handler){
     var onceWrapperHandler;
-    onceWrapperHandler = (Emission emission){
+    onceWrapperHandler = (Event emission){
       handler(emission);
       emission.finished.then((_){
         off(type, onceWrapperHandler);
@@ -78,26 +78,26 @@ class Emitter{
   }
 
   /**
-   * Calls all the handlers in the queue of type [data] with an [Emission] containing [data]
-   * asynchronously, returning a [Future] that completes with the [Emission] when all of the
+   * Calls all the handlers in the queue of type [data] with an [Event] containing [data]
+   * asynchronously, returning a [Future] that completes with the [Event] when all of the
    * [Handler]s have been called.
    */
-  Future<Emission> emit(dynamic data){
-    var emission = new Emission._internal(this, data);
+  Future<Event> emit(dynamic data){
+    var event = new Event._internal(this, data);
     var finished;
     //make eventQueues execute async so only one event queue is ever executing at a time.
-    finished = new Future<Emission>.delayed(new Duration(), (){
-      emission._finished = finished;
+    finished = new Future<Event>.delayed(new Duration(), (){
+      event._finished = finished;
       _emittingType = data.runtimeType;
       if(_handlerQueues != null && _handlerQueues[_emittingType] != null){
-        _handlerQueues[_emittingType].forEach((Handler handler){ handler(emission); });
+        _handlerQueues[_emittingType].forEach((Handler handler){ handler(event); });
       }
 
       if(_handlerQueues != null && _handlerQueues[All] != null){
-        _handlerQueues[All].forEach((Handler handler){ handler(emission); });
+        _handlerQueues[All].forEach((Handler handler){ handler(event); });
       }
       _emittingType = null;
-      return emission;
+      return event;
     });
 
     return finished;

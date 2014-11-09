@@ -4,14 +4,14 @@
 
 part of emitters.test.unit;
 
-void runEmissionTests(){
+void runEventTests(){
 
-  group('Emission', (){
+  group('Event', (){
 
     test('contains the emitter object by default.', (){
       emitter1.emit(new TypeA());
       Timer.run(expectAsync((){
-        expect(lastReceivedEmission.emitter, equals(emitter1));
+        expect(lastReceivedEvent.emitter, equals(emitter1));
       }));
     });
 
@@ -19,7 +19,7 @@ void runEmissionTests(){
       var data = new TypeA();
       emitter1.emit(data);
       Timer.run(expectAsync((){
-        expect(lastReceivedEmission.data, equals(data));
+        expect(lastReceivedEvent.data, equals(data));
       }));
     });
 
@@ -28,7 +28,7 @@ void runEmissionTests(){
       emitter1.emit(data);
       Timer.run(expectAsync((){
         var setInFuture;
-        lastReceivedEmission.finished.then((event){ setInFuture = event; });
+        lastReceivedEvent.finished.then((event){ setInFuture = event; });
         Timer.run(expectAsync((){
           expect(setInFuture.data, equals(data));
         }));
@@ -38,21 +38,21 @@ void runEmissionTests(){
     test('event.data is readonly.', (){
       emitter1.emit(new TypeA());
       Timer.run(expectAsync((){
-        expect(() => lastReceivedEmission.data = null, throwsA(new isInstanceOf<NoSuchMethodError>()));
+        expect(() => lastReceivedEvent.data = null, throwsA(new isInstanceOf<NoSuchMethodError>()));
       }));
     });
 
     test('event.emitter is readonly.', (){
       emitter1.emit(new TypeA());
       Timer.run(expectAsync((){
-        expect(() => lastReceivedEmission.emitter = null, throwsA(new isInstanceOf<NoSuchMethodError>()));
+        expect(() => lastReceivedEvent.emitter = null, throwsA(new isInstanceOf<NoSuchMethodError>()));
       }));
     });
 
     test('event.finished is getter only.', (){
       emitter1.emit(new TypeA());
       Timer.run(expectAsync((){
-        expect(() => lastReceivedEmission.finished = null, throwsA(new isInstanceOf<NoSuchMethodError>()));
+        expect(() => lastReceivedEvent.finished = null, throwsA(new isInstanceOf<NoSuchMethodError>()));
       }));
     });
 

@@ -13,7 +13,7 @@ class Receiver{
   /// Adds the [handler] to the [emitter]s handler queue of [type].
   void listen(Emitter emitter, Type type, Handler handler) => _listen(emitter, type, handler, (e, t, h) => e.on(t, h));
 
-  /// Adds the [handler] to the [emitter]s handler queue of [type] for one emission only.
+  /// Adds the [handler] to the [emitter]s handler queue of [type] for one event only.
   void listenOnce(Emitter emitter, Type type, Handler handler) => _listen(emitter, type, handler, (e, t, h) => e.once(t, h));
 
   void _listen(Emitter emitter, Type type, Handler handler, void on(Emitter emitter, Type type, Handler handler)){
