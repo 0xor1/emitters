@@ -1,7 +1,7 @@
 #Emitters [![Build Status](https://drone.io/github.com/0xor1/emitters/status.png)](https://drone.io/github.com/0xor1/emitters/latest)
 
-Emitters provides a simple mixin class, Emitter, to enable any object to emit arbitrary
-objects. It also provides a convenience mixin class, Receiver, to assist
+Emitters provides a simple mixin class, Emitter, to enable any object to emit events
+with arbitrary data types. It also provides a convenience mixin class, Receiver, to assist
 objects in managing their handler functions.
 
 ##Example
@@ -33,8 +33,8 @@ class Dog extends Object with Emitter{
 }
 
 class Cat extends Object with Receiver{
-  void dogBarkHandler(Emission<Bark> emission){
-    var bark = emission.data;
+  void dogBarkHandler(Event<Bark> event){
+    var bark = event.data;
     if(bark.volume > 10){
       print('cat running away');
     }else{
@@ -61,8 +61,8 @@ void main(){
 
 ##All
 
-There is a special Type **All** which allows receivers to listen for every object emitted
-by an **Emitter** with a single handler regardless of the objects type.
+There is a special Type **All** which allows receivers to listen for every event data type emitted
+by an **Emitter** with a single handler.
 
 ```dart
 /// raw emiiter

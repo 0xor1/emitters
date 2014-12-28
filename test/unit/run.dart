@@ -9,7 +9,7 @@ import 'dart:async';
 import 'package:emitters/emitters.dart';
 
 part 'emitter.dart';
-part 'emission.dart';
+part 'event.dart';
 part 'receiver.dart';
 
 class TypeA{}
@@ -19,7 +19,7 @@ Emitter emitter1;
 Emitter emitter2;
 Receiver receiver;
 
-Emission lastReceivedEmission;
+Event lastReceivedEvent;
 int typeAReceivedCount;
 int typeBReceivedCount;
 
@@ -30,7 +30,7 @@ Handler handler = (event){
   else if(event.data is TypeB){
     typeBReceivedCount++;
   }
-  lastReceivedEmission = event;
+  lastReceivedEvent = event;
 };
 
 void setUpTestObjects(){
@@ -45,7 +45,7 @@ void setUpTestObjects(){
 }
 
 void tearDownTestObjects(){
-  emitter1 = emitter2 = receiver = lastReceivedEmission = null;
+  emitter1 = emitter2 = receiver = lastReceivedEvent = null;
   typeAReceivedCount = typeBReceivedCount = 0;
 }
 
@@ -53,6 +53,6 @@ void main(){
   setUp(setUpTestObjects);
   tearDown(tearDownTestObjects);
   runEmitterTests();
-  runEmissionTests();
+  runEventTests();
   runReceiverTests();
 }

@@ -10,9 +10,9 @@ void runEmitterTests(){
 
     test('Handlers are called asynchronously.', (){
       emitter1.emit(new TypeA());
-      expect(lastReceivedEmission, equals(null));
+      expect(lastReceivedEvent, equals(null));
       Timer.run(expectAsync((){
-        expect(lastReceivedEmission.emitter, equals(emitter1));
+        expect(lastReceivedEvent.emitter, equals(emitter1));
       }));
     });
 
@@ -43,7 +43,7 @@ void runEmitterTests(){
       emitter1.emit(new TypeA()).then((event){ setInFuture = event; });
       Timer.run(expectAsync((){
         Timer.run(expectAsync((){
-          expect(setInFuture, equals(lastReceivedEmission));
+          expect(setInFuture, equals(lastReceivedEvent));
         }));
       }));
     });
@@ -56,6 +56,18 @@ void runEmitterTests(){
       emitter1.emit(new TypeA());
       Timer.run(expectAsync((){
         expect(count, equals(1));
+      }));
+    });
+
+    test('once handlers are removed with off', (){
+      var count = 0;
+      var handler = (_){count++;};
+      emitter1.once(TypeA, handler);
+      emitter1.off(TypeA, handler);
+      emitter1.emit(new TypeA());
+      emitter1.emit(new TypeA());
+      Timer.run(expectAsync((){
+        expect(count, equals(0));
       }));
     });
 
