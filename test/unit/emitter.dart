@@ -59,6 +59,18 @@ void runEmitterTests(){
       }));
     });
 
+    test('once handlers are removed with off', (){
+      var count = 0;
+      var handler = (_){count++;};
+      emitter1.once(TypeA, handler);
+      emitter1.off(TypeA, handler);
+      emitter1.emit(new TypeA());
+      emitter1.emit(new TypeA());
+      Timer.run(expectAsync((){
+        expect(count, equals(0));
+      }));
+    });
+
     test('once doesn\'t allow a handler to be duplicated', (){
       var count = 0;
       var handler = (_){count++;};

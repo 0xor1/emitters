@@ -2,7 +2,7 @@
  * Author:  Daniel Robinson http://github.com/0xor1
  */
 
-/// Mixins to make any object into an [Event] [Emitter] or [Receiver] of arbitrary data types.
+/// Mixins to make any object into an [Emitter] or [Receiver] of arbitrary data types.
 library emitters;
 
 import 'dart:async';
